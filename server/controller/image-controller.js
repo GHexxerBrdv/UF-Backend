@@ -1,8 +1,9 @@
 import { createFile, getFileById, incrementDownloadCount } from "../models/file.js";
 
 export const uploadImage = async (req, res) => {
+  const filePath = req.file.location || req.file.path || req.file.key;
   const fileObj = {
-    path: req.file.path,
+    path: filePath,
     name: req.file.originalname
   };
   try {
@@ -24,6 +25,10 @@ export const downloadImage = async (req, res) => {
     }
 
     await incrementDownloadCount(fileId);
+
+    if (file.path.startsWith('http://') || file.path.startsWith('https://')) {
+      return res.redirect(file.path);
+    }
 
     res.download(file.path, file.name);
   } catch (error) {

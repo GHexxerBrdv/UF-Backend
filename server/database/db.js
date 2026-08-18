@@ -5,14 +5,18 @@ dotenv.config();
 
 const { Pool } = pg;
 
-const connectionString = process.env.DATABASE_URL || process.env.DB_URL;
+export let pool;
 
-export const pool = new Pool({
-  connectionString: connectionString || 'postgres://postgres:postgres@localhost:5432/file_sharing_db',
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-});
+export const initPool = (config) => {
+  if (config) {
+    pool = new Pool(config);
+  }
+  return pool;
+};
 
-const DBConnection = async () => {
+export const getPool = () => pool;
+
+export const DBConnection = async () => {
   try {
     const client = await pool.connect();
     console.log('Database connected successfully');
@@ -34,3 +38,4 @@ const DBConnection = async () => {
 };
 
 export default DBConnection;
+
