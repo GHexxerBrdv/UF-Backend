@@ -27,6 +27,7 @@ async function getSecret(name) {
 const region = await getSecret("/uf/aws_region");
 const port = await getSecret("/uf/port");
 const host = await getSecret("/uf/db/host");
+
 const dbName = await getSecret("/uf/db/name");
 const password = await getSecret("/uf/db/password");
 const userName = await getSecret("/uf/db/username");
@@ -47,7 +48,7 @@ const dbConfig = {
     password: password,
     database: dbName,
     port: 5432,
-    ssl: false
+    ssl: { rejectUnauthorized: false }
 }
 
 const app = express();
