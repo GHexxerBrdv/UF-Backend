@@ -4,6 +4,7 @@ import cors from 'cors';
 import DBConnection, { initPool } from './database/db.js';
 import { initS3Config } from './utils/upload.js';
 import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
