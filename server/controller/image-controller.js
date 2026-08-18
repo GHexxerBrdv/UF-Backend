@@ -8,7 +8,8 @@ export const uploadImage = async (req, res) => {
   };
   try {
     const file = await createFile(fileObj);
-    res.status(200).json({ path: `http://localhost:8000/file/${file.id}` });
+    const host = req.get('host');
+    res.status(200).json({ path: `${req.protocol}://${host}/file/${file.id}` });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: error.message });
