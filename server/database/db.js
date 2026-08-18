@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const DBConnection = async ()=>{
     try {
-       await mongoose.connect('mongodb+srv://GaurangBRDV:w8U064MxVE3lO4g7@jwtcluster.q5gd2sh.mongodb.net/?retryWrites=true&w=majority&appName=JWTCluster',{useNewUrlParser : true})
+       await mongoose.connect(process.env.DB_URL,{useNewUrlParser : true})
         console.log('Databse connected');
     } catch (error) {
         console.error('Error while connecting with database',error.message);
