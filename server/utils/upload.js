@@ -3,10 +3,12 @@ import multerS3 from 'multer-s3';
 import { S3Client } from '@aws-sdk/client-s3';
 
 
+let s3Client;
+let activeBucketName;
 let uploadMiddleware;
 
 export const initS3Config = ({ region, accessKeyId, secretAccessKey, bucketName }) => {
-  const s3 = new S3Client({
+  s3Client = new S3Client({
     region: region,
     credentials: {
       accessKeyId: accessKeyId,
@@ -14,9 +16,11 @@ export const initS3Config = ({ region, accessKeyId, secretAccessKey, bucketName 
     },
   });
 
+  activeBucketName = bucketName;
+
   uploadMiddleware = multer({
     storage: multerS3({
-      s3: s3,
+      s3: s3Client,
       bucket: bucketName,
       metadata: (req, file, cb) => {
         cb(null, { fieldName: file.fieldname });
@@ -27,6 +31,9 @@ export const initS3Config = ({ region, accessKeyId, secretAccessKey, bucketName 
     }),
   });
 };
+
+export const getS3Client = () => s3Client;
+export const getBucketName = () => activeBucketName;
 
 const upload = {
   single: (fieldName) => (req, res, next) => {
